@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSchedule", "SchoolSchedule\SchoolSchedule.csproj", "{F705016C-FAF1-44F4-8345-FA351AFE4D0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSchedule.DB", "..\SchoolSchedule.DB\SchoolSchedule.DB\SchoolSchedule.DB.csproj", "{296402E5-DB40-4CE4-A85D-AB8DA932B497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A66745DD-CC6E-462D-A678-E9C19E4EAE80}
+	EndGlobalSection
+EndGlobal
