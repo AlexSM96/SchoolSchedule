@@ -14,13 +14,13 @@ namespace SchoolSchedule.Model
             _context = new SchoolScheduleContext();
         }
 
-        public List<Class> GetClasses()
+        public List<Class> GetTableClasses()
         {
             IQueryable<Class> classes = _context.Classes.OrderBy(x => x.ClassName);
             return classes.ToList();
         }
 
-        public List<Schedule> GetSchedule()
+        public List<Schedule> GetTableSchedule()
         {
             IQueryable<Schedule> schedulies = _context.Schedules.OrderBy(x => x.Class.ClassName);
             return schedulies
@@ -31,12 +31,18 @@ namespace SchoolSchedule.Model
                 .ToList();
         }
 
-        public List<TeacherAndLesson> GetTeacherAndLessons()
+        public List<TeacherAndLesson> GetTableTeacherAndLessons()
         {
             IQueryable<TeacherAndLesson> teachers = _context.TeacherAndLessons;
             return teachers
                 .Include("Teacher")
                 .ToList();
+        }
+
+        public List<WeekDay> GetTableWeekDay()
+        {
+            IQueryable<WeekDay> weekDay = _context.WeekDays.OrderBy(x=>x.WeekDay1);
+            return weekDay.ToList();
         }
     }
 }

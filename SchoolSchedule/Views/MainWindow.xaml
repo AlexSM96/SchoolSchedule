@@ -94,7 +94,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
-                    
+
                     <DockPanel Grid.Column="1">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -135,8 +135,8 @@
                                     <DataGrid ItemsSource="{Binding RequestA}"
                                               AutoGenerateColumns="False">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="ФИО преподавателя" Binding="{Binding Teacher.FullName}"/>
-                                            <DataGridTextColumn Header="Кол-во уникальных уроков"/>
+                                            <DataGridTextColumn Header="ФИО преподавателя" Binding="{Binding Teacher}"/>
+                                            <DataGridTextColumn Header="Кол-во уникальных уроков" Binding="{Binding LessonsCount}"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </GroupBox>
@@ -144,25 +144,49 @@
                         </TabItem>
                         <TabItem Header="Запрос B">
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Найти аудиторию, которая меньше всего используется в дни недели, выбранные пользователем (при поиске могут быть выбрано несколько дней недели одновременно)"  
-                                           Grid.Row="0" TextWrapping="Wrap" HorizontalAlignment="Center" FontWeight="Bold" FontSize="24"></TextBlock>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Grid.Column="0" Header ="Посещаемость аудиторий за выбранные дни">
+                                    <DataGrid ItemsSource="{Binding RequestB, UpdateSourceTrigger=PropertyChanged}"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Аудитория" Binding="{Binding ClassRoom}"/>
+                                            <DataGridTextColumn Header="Кол-во посещений" Binding="{Binding CountTake}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                                <GroupBox Grid.Column="1" Header="Выберете 1 или несколько дней недели">
+                                    <DockPanel>
+                                        <GroupBox DockPanel.Dock="Top">
+                                            <ListBox ItemsSource="{Binding WeekDay}"
+                                                     DisplayMemberPath="WeekDayName"
+                                                     SelectedItem="{Binding SelectedDay,UpdateSourceTrigger=PropertyChanged}">
+                                            </ListBox>
+                                        </GroupBox>
+                                        <Button Content="Найти аудиторию" 
+                                                    Height="25" Width="300" MinWidth="100"
+                                                    VerticalAlignment="Top"
+                                                    Command="{Binding FindClassRoom}">
+                                        </Button>
+                                    </DockPanel>
+                                </GroupBox>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Запрос C">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Для каждого класса подсчитать количество уроков за неделю и количество различных учителей"  
-                                           Grid.Row="0" TextWrapping="Wrap" 
-                                           HorizontalAlignment="Center" FontWeight="Bold" 
-                                           FontSize="24"></TextBlock>
-                            </Grid>
+                            <DockPanel>
+                                <GroupBox DockPanel.Dock="Top" Header="Количество уроков для каждого класса">
+                                    <DataGrid ItemsSource="{Binding RequestC}"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Класс" Binding="{Binding Class}"/>
+                                            <DataGridTextColumn Header="Кол-во уроков за неделю" Binding="{Binding LessonCount}"/>
+                                            <DataGridTextColumn Header="Кол-во различных учителей" Binding="{Binding UniqTeachersCount}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                            </DockPanel>
                         </TabItem>
                         <TabItem Header="Запрос D">
                             <Grid>
