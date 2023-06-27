@@ -3,6 +3,8 @@ using SchoolSchedule.DB.Database.Context;
 using SchoolSchedule.DB.Database.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace SchoolSchedule.Model
 {
@@ -16,13 +18,17 @@ namespace SchoolSchedule.Model
 
         public List<Class> GetTableClasses()
         {
-            IQueryable<Class> classes = _context.Classes.OrderBy(x => x.ClassName);
-            return classes.ToList();
+            IQueryable<Class> classes = _context.Classes
+                .OrderBy(x => x.ClassName);
+            return classes
+                .Include(x=>x.Schedules)
+                .ToList();
         }
 
         public List<Schedule> GetTableSchedule()
         {
-            IQueryable<Schedule> schedulies = _context.Schedules.OrderBy(x => x.Class.ClassName);
+            IQueryable<Schedule> schedulies = _context.Schedules
+                .OrderBy(x => x.Class.ClassName);
             return schedulies
                 .Include(x => x.TeacherAndLesson.LessonNameNavigation)
                 .Include(x => x.TeacherAndLesson)
@@ -41,8 +47,16 @@ namespace SchoolSchedule.Model
 
         public List<WeekDay> GetTableWeekDay()
         {
-            IQueryable<WeekDay> weekDay = _context.WeekDays.OrderBy(x=>x.WeekDay1);
+            IQueryable<WeekDay> weekDay = _context.WeekDays
+                .OrderBy(x=>x.WeekDay1);
             return weekDay.ToList();
+        }
+
+        public List<Schedule> GetRequestD(string selectedClass)
+        {
+            IQueryable<Schedule> schedulies = _context.Schedules
+                .Where(x=>x.Class.ClassName.Contains(selectedClass));
+            return schedulies.ToList();
         }
     }
 }

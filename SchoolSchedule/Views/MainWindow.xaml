@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:SchoolSchedule"
         xmlns:vm="clr-namespace:SchoolSchedule.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="700">
+        Title="{Binding Title}" Height="450" Width="600">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <DockPanel>
         <TabControl>
-            <TabItem Header="Вввод/Редактирование расписания">
-                <Grid>
+            <TabItem Header=" Редактирование расписания">
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
@@ -21,33 +21,33 @@
                     <GroupBox Header="Класы" Grid.Column="0">
                         <ListBox ItemsSource="{Binding Classes}"
                                  DisplayMemberPath="ClassName"
-                                 SelectedItem="{Binding SelectedClass}">
+                                 SelectedItem="{Binding SelectedClass}"
+                                 SelectedIndex="0">
                         </ListBox>
                     </GroupBox>
-                    <GroupBox Header="Школьное расписание" Grid.Column="1">
-                        <DataGrid ItemsSource="{Binding SelectedClass.Schedules}"
+                    <DockPanel Grid.Column="1">
+                        <GroupBox Header="Расписание" DockPanel.Dock="Top">
+                            <DataGrid ItemsSource="{Binding SelectedClassSchedule}"
                                   AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="День недели" Binding="{Binding WeekDayNavigation.WeekDayName}"/>
-                                <DataGridTextColumn Header="Класс" Binding="{Binding Class.ClassName}"/>
-                                <DataGridTextColumn Header="Номер урока" Binding="{Binding LessonNumber}"/>
-                                <DataGridTextColumn Header="Время начала" Binding="{Binding LessonNumberNavigation.LessonTimeStart, StringFormat=HH:mm}"/>
-                                <DataGridTextColumn Header="Время окончания" Binding="{Binding LessonNumberNavigation.LessonTimeEnd,StringFormat=HH:mm}"/>
-                                <DataGridTextColumn Header="Название предмета" Binding="{Binding LessonName}"/>
-                                <DataGridTextColumn Header="ФИО учителя" Binding="{Binding TeacherAndLesson.Teacher.FullName}"/>
-                                <DataGridTextColumn Header="Аудитория" Binding="{Binding TeacherAndLesson.LessonNameNavigation.ClassRoom}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </GroupBox>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="День недели" Binding="{Binding WeekDay}"/>
+                                    <DataGridTextColumn Header="Класс" Binding="{Binding ClassId}"/>
+                                    <DataGridTextColumn Header="Номер урока" Binding="{Binding LessonNumber}"/>
+                                    <DataGridTextColumn Header="Преподаватель" Binding="{Binding TeacherId}"/>
+                                    <DataGridTextColumn Header="Предмет" Binding="{Binding LessonName}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Редактирование классов">
-                <Grid>
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Список классов" Grid.Column="0">
+                    <GroupBox Header="Список классов" Grid.Column="0" Margin="5">
                         <DataGrid ItemsSource="{Binding Classes}"
                                   AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
@@ -56,12 +56,12 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
-                    <DockPanel Grid.Column="1">
+                    <DockPanel Grid.Column="1" Margin="5">
                         <StackPanel Orientation="Vertical" 
                                     DockPanel.Dock="Top">
                             <Label Content="Класс"/>
                             <TextBox Text="{Binding ClassName, UpdateSourceTrigger=PropertyChanged}" 
-                                     MinWidth="220" VerticalAlignment="Top" 
+                                     VerticalAlignment="Top" 
                                      Margin="5"/>
                             <Button Content="Добавить" Height="25" Margin="5"
                                     Command="{Binding AddNewClass}"></Button>
@@ -69,7 +69,7 @@
                         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
                             <Label Content="ID Класса"/>
                             <TextBox Text="{Binding ClassId, UpdateSourceTrigger=PropertyChanged}" 
-                                     MinWidth="220" VerticalAlignment="Top" 
+                                     VerticalAlignment="Top" 
                                      Margin="5"/>
                             <Button Content="Удалить" Height="25" Margin="5"
                                     Command="{Binding RemoveClass}"></Button>
@@ -78,12 +78,12 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Редактирование преподавателей и предметов">
-                <Grid>
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Учитель и предмет">
+                    <GroupBox Header="Преподаватель и предмет">
                         <DataGrid ItemsSource="{Binding TeachersAndLessons}"
                                   Grid.Column="0"
                                   AutoGenerateColumns="False">
@@ -94,8 +94,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
-
-                    <DockPanel Grid.Column="1">
+                    <DockPanel Grid.Column="1" Margin="5">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="190"/>
@@ -126,10 +125,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Отчеты(запросы)">
-                <DockPanel>
+                <DockPanel Margin="10">
                     <TabControl DockPanel.Dock="Top">
                         <TabItem Header="Запрос A">
-                            <DockPanel>
+                            <DockPanel Margin="5">
                                 <GroupBox Header="Найти учителя, который ведет больше всего различных предметов"
                                           DockPanel.Dock="Top">
                                     <DataGrid ItemsSource="{Binding RequestA}"
@@ -143,10 +142,10 @@
                             </DockPanel>
                         </TabItem>
                         <TabItem Header="Запрос B">
-                            <Grid>
+                            <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="250"/>
                                 </Grid.ColumnDefinitions>
                                 <GroupBox Grid.Column="0" Header ="Посещаемость аудиторий за выбранные дни">
                                     <DataGrid ItemsSource="{Binding RequestB, UpdateSourceTrigger=PropertyChanged}"
@@ -162,11 +161,12 @@
                                         <GroupBox DockPanel.Dock="Top">
                                             <ListBox ItemsSource="{Binding WeekDay}"
                                                      DisplayMemberPath="WeekDayName"
-                                                     SelectedItem="{Binding SelectedDay,UpdateSourceTrigger=PropertyChanged}">
+                                                     SelectedItem="{Binding SelectedDay, UpdateSourceTrigger=PropertyChanged}"
+                                                     SelectionMode="Single">
                                             </ListBox>
                                         </GroupBox>
                                         <Button Content="Найти аудиторию" 
-                                                    Height="25" Width="300" MinWidth="100"
+                                                    Height="30" Width="195"
                                                     VerticalAlignment="Top"
                                                     Command="{Binding FindClassRoom}">
                                         </Button>
@@ -175,7 +175,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Запрос C">
-                            <DockPanel>
+                            <DockPanel Margin="5">
                                 <GroupBox DockPanel.Dock="Top" Header="Количество уроков для каждого класса">
                                     <DataGrid ItemsSource="{Binding RequestC}"
                                               AutoGenerateColumns="False">
@@ -189,16 +189,21 @@
                             </DockPanel>
                         </TabItem>
                         <TabItem Header="Запрос D">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Вывести список предметов и учителей для заданной пользователем параллели классов (например, 10-е классы)"  
-                                           Grid.Row="0" TextWrapping="Wrap" 
-                                           HorizontalAlignment="Center" FontWeight="Bold" 
-                                           FontSize="24"></TextBlock>
-                            </Grid>
+                            <DockPanel Margin="5">
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                    <Button Content="Поиск" Command="{Binding FindClassTeacher}" HorizontalAlignment="Left"></Button>
+                                    <TextBox DockPanel.Dock="Top" Text="{Binding ClassName, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="200"></TextBox>
+                                </StackPanel>
+                                <GroupBox Margin="5" Header="{Binding ClassName}"
+                                          HeaderStringFormat="Список предметов и преподавателей для классов {0}">
+                                    <DataGrid ItemsSource="{Binding RequestD}" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Предмет" Binding="{Binding LessonName}"/>
+                                            <DataGridTextColumn Header="Преподаватель" Binding="{Binding TeacherAndLesson.Teacher.FullName}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                            </DockPanel>
                         </TabItem>
                     </TabControl>
                 </DockPanel>
