@@ -28,6 +28,20 @@ namespace SchoolSchedule.Model
                 LessonName = lessonName
             });
             _context.SaveChanges();
-        } 
+        }
+
+        public static void Remove
+            (int weekDay, int classId, byte lessonNumber, byte teacherId, string lessonName)
+        {
+            _context.Schedules.Remove(new Schedule
+            {
+                WeekDay = weekDay,
+                ClassId = classId,
+                LessonNumber = lessonNumber,
+                TeacherId = teacherId,
+                LessonName = lessonName
+            });
+            _context.SaveChanges();
+        }
     }
 }

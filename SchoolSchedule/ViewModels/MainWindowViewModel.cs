@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SchoolSchedule.Commands;
-using SchoolSchedule.DB.Database.Context;
 using SchoolSchedule.DB.Database.Entities;
 using SchoolSchedule.Model;
 using SchoolSchedule.ViewModels.Base;
@@ -17,17 +16,17 @@ namespace SchoolSchedule.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private Table _table;
+        private Table _tables;
 
         public ObservableCollection<Class> Classes { get; set; }
 
         public ObservableCollection<TeacherAndLesson> TeachersAndLessons { get; }
 
-        public ObservableCollection<object> RequestA { get; }
+        public ObservableCollection<RequestA> RequestA { get; }
 
-        public ObservableCollection<object> RequestB { get; set; }
+        public ObservableCollection<RequestB> RequestB { get; set; }
 
-        public ObservableCollection<object> RequestC { get; }
+        public ObservableCollection<RequestC> RequestC { get; }
 
         public ObservableCollection<object> RequestD { get; set; }
 
@@ -141,7 +140,7 @@ namespace SchoolSchedule.ViewModels
 
         public MainWindowViewModel()
         {
-            _table = new();
+            _tables = new();
 
             #region Commands
             AddNewTeacherAndLessons = new RelayCommand
@@ -162,17 +161,21 @@ namespace SchoolSchedule.ViewModels
             FindClassTeacher = new RelayCommand
                 (OnFindClassTeacherExecuted, CanFindClassTeacherExecute);
 
-            SaveSchedule = new RelayCommand(OnSaveScheduleExecuted, CanSaveScheduleExecute);
+            SaveSchedule = new RelayCommand
+                (OnSaveScheduleExecuted, CanSaveScheduleExecute);
+
+            DeleteSchedule =new RelayCommand
+                (OnDeleteScheduleExecuted, CanDeleteScheduleExecute);
 
             #endregion
 
-            Classes = new ObservableCollection<Class>(_table.GetTableClasses());
-            SelectedClass.Schedules = _table.GetTableSchedule();
-            TeachersAndLessons = new ObservableCollection<TeacherAndLesson>(_table
+            Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
+            SelectedClass.Schedules = _tables.GetTableSchedule();
+            TeachersAndLessons = new ObservableCollection<TeacherAndLesson>(_tables
                 .GetTableTeacherAndLessons());
-            WeekDay = new ObservableCollection<WeekDay>(_table.GetTableWeekDay());
-            RequestA = new ObservableCollection<object>(GetDataA());
-            RequestC = new ObservableCollection<object>(GetDataC());
+            WeekDay = new ObservableCollection<WeekDay>(_tables.GetTableWeekDay());
+            RequestA = new ObservableCollection<RequestA>(GetDataA());
+            RequestC = new ObservableCollection<RequestC>(GetDataC());
         }
 
         private IEnumerable<RequestA> GetDataA()
@@ -192,7 +195,7 @@ namespace SchoolSchedule.ViewModels
 
         private IEnumerable<RequestB> GetDataB()
         {
-            var audience = (from schedule in _table.GetTableSchedule()
+            var audience = (from schedule in _tables.GetTableSchedule()
                             where WeekDays.Contains(schedule.WeekDayNavigation)
                             group schedule by schedule.TeacherAndLesson.LessonNameNavigation.ClassRoom
                             into x
@@ -209,7 +212,7 @@ namespace SchoolSchedule.ViewModels
 
         private IEnumerable<RequestC> GetDataC()
         {
-            var requestC = from schedule in _table.GetTableSchedule()
+            var requestC = from schedule in _tables.GetTableSchedule()
                            group schedule by schedule.Class.ClassName into x
                            select new
                            {
@@ -275,7 +278,7 @@ namespace SchoolSchedule.ViewModels
             if (!_className.IsNullOrEmpty())
             {
                 NewClass.Add(_className);
-                Classes = new ObservableCollection<Class>(_table.GetTableClasses());
+                Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
                 OnPropertyChanged(nameof(Classes));
             }
         }
@@ -288,7 +291,7 @@ namespace SchoolSchedule.ViewModels
         private void OnRemoveClassExecuted(object parameter)
         {
             NewClass.Remove(_classId);
-            Classes = new ObservableCollection<Class>(_table.GetTableClasses());
+            Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
             OnPropertyChanged(nameof(Classes));
         }
         #endregion
@@ -300,7 +303,7 @@ namespace SchoolSchedule.ViewModels
         private void OnFindClassRoomExecuted(object parameter)
         {
             if (WeekDays.Count() == 0) return;
-            RequestB = new ObservableCollection<object>(GetDataB());
+            RequestB = new ObservableCollection<RequestB>(GetDataB());
             OnPropertyChanged(nameof(RequestB));
             WeekDays.Clear();
         }
@@ -315,7 +318,7 @@ namespace SchoolSchedule.ViewModels
         private void OnFindClassTeacherExecuted(object parameter)
         {
             if (ClassName.IsNullOrEmpty()) return;
-            var dataD = _table.GetDataD(ClassName)
+            var dataD = _tables.GetDataD(ClassName)
                 .GroupBy(x => x.LessonName);
             RequestD = new ObservableCollection<object>(dataD);
             OnPropertyChanged(nameof(RequestD));
@@ -348,6 +351,35 @@ namespace SchoolSchedule.ViewModels
                 MessageBox.Show(exception?.InnerException?.Message);
             }
         }
+        #endregion
+
+        #region DeletescheduleCommand
+
+        public ICommand DeleteSchedule { get; }
+        private bool CanDeleteScheduleExecute(object parameter) => true;
+
+        private void OnDeleteScheduleExecuted(object parameter)
+        {
+            if (parameter is not DataGrid grid) return;
+            try
+            {
+                var currentItems = grid.Items.CurrentItem;
+                if (currentItems is not Schedule schedule) return;
+                var collection = new ObservableCollection<Schedule> { schedule };
+
+                foreach (var item in collection)
+                {
+                    NewSchedule.Remove(item.WeekDay, item.ClassId,
+                        item.LessonNumber, item.TeacherId, item.LessonName);
+                }
+                OnPropertyChanged(nameof(collection));
+            }
+            catch (System.Exception exception)
+            {
+                MessageBox.Show(exception?.InnerException?.Message);
+            }
+        }
+
         #endregion
     }
 }
