@@ -3,15 +3,13 @@ using SchoolSchedule.DB.Database.Context;
 using SchoolSchedule.DB.Database.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 
 namespace SchoolSchedule.Model
 {
-    internal class MainContext
+    internal class Table
     {
         private SchoolScheduleContext _context;
-        public MainContext()
+        public Table()
         {
             _context = new SchoolScheduleContext();
         }
@@ -52,10 +50,10 @@ namespace SchoolSchedule.Model
             return weekDay.ToList();
         }
 
-        public List<Schedule> GetRequestD(string selectedClass)
+        public List<Schedule> GetDataD(string selectedClass)
         {
             IQueryable<Schedule> schedulies = _context.Schedules
-                .Where(x=>x.Class.ClassName.Contains(selectedClass));
+                .Where(x => x.Class.ClassName.Contains(selectedClass));
             return schedulies.ToList();
         }
     }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SchoolSchedule"
+        xmlns:model="clr-namespace:SchoolSchedule.DB.Database.Entities;assembly=SchoolSchedule.DB"
         xmlns:vm="clr-namespace:SchoolSchedule.ViewModels"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="600">
@@ -18,17 +19,27 @@
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Класы" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="1" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Right">
+                        <Button Content="Сохранить" Command="{Binding SaveSchedule}" CommandParameter="{Binding ElementName=myData}"></Button>
+                    </StackPanel>
+                    <GroupBox Header="Класы" Grid.Column="0" Grid.Row="1">
                         <ListBox ItemsSource="{Binding Classes}"
                                  DisplayMemberPath="ClassName"
                                  SelectedItem="{Binding SelectedClass}"
                                  SelectedIndex="0">
                         </ListBox>
                     </GroupBox>
-                    <DockPanel Grid.Column="1">
+                    <DockPanel Grid.Column="1" Grid.Row="1">
                         <GroupBox Header="Расписание" DockPanel.Dock="Top">
-                            <DataGrid ItemsSource="{Binding SelectedClassSchedule}"
-                                  AutoGenerateColumns="False">
+                            <DataGrid Name="myData" ItemsSource="{Binding SelectedClassSchedule}"
+                                      AlternatingRowBackground="LightGray"
+                                      GridLinesVisibility="Vertical" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="День недели" Binding="{Binding WeekDay}"/>
                                     <DataGridTextColumn Header="Класс" Binding="{Binding ClassId}"/>
