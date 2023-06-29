@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\SchoolSchedule.DB\SchoolSchedule.DB\SchoolSchedule.DB.csproj" />
   </ItemGroup>
 

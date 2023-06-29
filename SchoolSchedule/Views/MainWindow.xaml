@@ -4,16 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SchoolSchedule"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:vm="clr-namespace:SchoolSchedule.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="950" 
+        Title="{Binding Title}" 
         SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <DockPanel>
         <TabControl>
-            <TabItem Header="Расписание">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Solid_School"/>
+                        <TextBlock Margin="5,0,0,0" Text="Расписание"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
@@ -30,7 +37,7 @@
                         <GroupBox Header="{Binding SelectedClass.ClassName}" 
                                   DockPanel.Dock="Top" 
                                   HeaderStringFormat="Расписание: {0}">
-                            <DataGrid ItemsSource="{Binding SelectedClass.Schedules}"
+                            <DataGrid ItemsSource="{Binding SelectedClassSchedule, UpdateSourceTrigger=Explicit}"
                                       AlternatingRowBackground="LightGray"
                                       GridLinesVisibility="Vertical" 
                                       AutoGenerateColumns="False" 
@@ -43,14 +50,21 @@
                                     <DataGridTextColumn Header="Время окончания" Binding="{Binding LessonNumberNavigation.LessonTimeEnd, StringFormat=HH:mm}"/>
                                     <DataGridTextColumn Header="Предмет" Binding="{Binding LessonName}"/>
                                     <DataGridTextColumn Header="Преподаватель" Binding="{Binding TeacherAndLesson.Teacher.FullName}"/>
-                                    <DataGridTextColumn Header="Аудитория" Binding="{Binding TeacherAndLesson.LessonNameNavigation.LessonName}"/>
+                                    <DataGridTextColumn Header="Аудитория" Binding="{Binding TeacherAndLesson.LessonNameNavigation.ClassRoom}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header=" Редактирование расписания">
+            <TabItem >
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Solid_Table" 
+                                         Foreground="Purple"></fa:ImageAwesome>
+                        <TextBlock Margin="5,0,0,0" Text="Редактирование расписание"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -63,10 +77,10 @@
                     <StackPanel Grid.Row="0" Grid.Column="1" 
                                 Orientation="Horizontal" 
                                 HorizontalAlignment="Right">
-                        <Button Content="Сохранить" Command="{Binding SaveSchedule}" 
-                                CommandParameter="{Binding ElementName=myData}"/>
+                        <Button Content="Сохранить" Command="{Binding SaveSchedule}" />
                         <Button Content="Удалить" Command="{Binding DeleteSchedule}"
-                                CommandParameter="{Binding ElementName=myData}" Margin="20,0,6,0"/>
+                                CommandParameter="{Binding ElementName=MyData}"
+                                Margin="20,0,6,0"/>
                     </StackPanel>
                     <GroupBox Header="Класы" Grid.Column="0" Grid.Row="1">
                         <ListBox ItemsSource="{Binding Classes}"
@@ -76,7 +90,7 @@
                     </GroupBox>
                     <DockPanel Grid.Column="1" Grid.Row="1">
                         <GroupBox Header="Расписание" DockPanel.Dock="Top">
-                            <DataGrid Name="myData" ItemsSource="{Binding SelectedClassSchedule}"
+                            <DataGrid x:Name="MyData" ItemsSource="{Binding SelectedClassSchedule}"
                                       AlternatingRowBackground="LightGray"
                                       GridLinesVisibility="Vertical" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
@@ -91,7 +105,13 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Редактирование классов">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Regular_Edit" Foreground="Purple"/>
+                        <TextBlock Margin="5,0,0,0" Text="Редактирование классов"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -129,7 +149,13 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Редактирование преподавателей и предметов">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Solid_ChalkboardTeacher" Foreground="Purple"/>
+                        <TextBlock Margin="5,0,0,0" Text="Редактирование преподавателей и предметов"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -176,7 +202,13 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Отчеты(запросы)">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Solid_ChalkboardTeacher" Foreground="Green"/>
+                        <TextBlock Margin="5,0,0,0" Text="Отчеты(запросы)"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <DockPanel Margin="10">
                     <TabControl DockPanel.Dock="Top">
                         <TabItem Header="Запрос A">
