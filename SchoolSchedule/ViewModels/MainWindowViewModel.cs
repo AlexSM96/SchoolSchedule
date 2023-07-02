@@ -32,6 +32,7 @@ namespace SchoolSchedule.ViewModels
 
         public ObservableCollection<object> RequestD { get; set; }
 
+        public List<Schedule> Schedules { get; set; }
 
         #region Title
         private string _title = "Расписание";
@@ -177,6 +178,7 @@ namespace SchoolSchedule.ViewModels
             WeekDay = new ObservableCollection<WeekDay>(_tables.GetTableWeekDay());
             RequestA = new ObservableCollection<RequestA>(GetDataA());
             RequestC = new ObservableCollection<RequestC>(GetDataC());
+            Schedules = new List<Schedule>(_tables.GetTableSchedule());
         }
 
         private IEnumerable<RequestA> GetDataA()
@@ -210,7 +212,9 @@ namespace SchoolSchedule.ViewModels
                 {
                     Class = x.Key,
                     LessonCount = x.Select(x => x.LessonName).Count(),
-                    UniqTeachersCount = x.Select(x => x.TeacherId).Count()
+                    UniqTeachersCount = x.Select(x => x.TeacherId)
+                    .Distinct()
+                    .Count()
                 });
             return request;
         }
