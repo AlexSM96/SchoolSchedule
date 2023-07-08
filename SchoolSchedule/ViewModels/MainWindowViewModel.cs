@@ -2,6 +2,7 @@
 using SchoolSchedule.Commands;
 using SchoolSchedule.DB.Database.Entities;
 using SchoolSchedule.Model;
+using SchoolSchedule.Model.Extensions;
 using SchoolSchedule.ViewModels.Base;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,7 +21,7 @@ namespace SchoolSchedule.ViewModels
 
         public ObservableCollection<Class> Classes { get; set; }
 
-        public ObservableCollection<TeacherAndLesson> TeachersAndLessons { get; }
+        public ObservableCollection<TeacherAndLesson> TeachersAndLessons { get; set; }
 
         public ObservableCollection<WeekDay> WeekDay { get; set; }
 
@@ -225,37 +226,36 @@ namespace SchoolSchedule.ViewModels
         public ICommand AddNewTeacherAndLessons { get; }
 
         private bool CanAddNewTeacherAndLessonsExecute(object parameter)
-            => _teacherName.IsNullOrEmpty() || _lessonName.IsNullOrEmpty()
-            || _classRoom.IsNullOrEmpty() ? false : true;
+            => !_teacherName.IsNullOrEmpty() && !_lessonName.IsNullOrEmpty() 
+                                             && !_classRoom.IsNullOrEmpty();
 
         private void OnAddNewTeacherAndLessonsExecuted(object parameter)
         {
-            if (TeacherName.IsNullOrEmpty()) return;
-            NewTeacherAndLesson.Add(_teacherId, _teacherName, _lessonName, _classRoom);
+            TeachersAndLessons.Create(
+                new Teacher { FullName = TeacherName },
+                new Lesson { LessonName = LessonName, ClassRoom = ClassRoom }
+                );
+            TeachersAndLessons = new ObservableCollection<TeacherAndLesson>
+                (_tables.GetTableTeacherAndLessons());
+            OnPropertyChanged(nameof(TeachersAndLessons));
         }
-
         #endregion
 
         #region RemoveTeacherAndLessonsCommand
         public ICommand RemoveTeacherAndLessons { get; }
 
         private bool CanRemoveTeacherAndLessonsExecute(object parameter)
-            => _teacherId > 0 || _lessonName != string.Empty;
+            => parameter is DataGrid { SelectedItem: TeacherAndLesson };
 
         private void OnRemoveTeacherAndLessonsExecuted(object parameter)
         {
-            if (_lessonName.IsNullOrEmpty())
-            {
-                NewTeacherAndLesson.RemoveTeacher(_teacherId);
-            }
-            if (_teacherId <= 0)
-            {
-                NewTeacherAndLesson.RemoveLesson(_lessonName);
-            }
-            if (_teacherId >= 0 && !_lessonName.IsNullOrEmpty())
-            {
-                NewTeacherAndLesson.Remove(_teacherId, _lessonName);
-            }
+            if (parameter is not DataGrid grid) return;
+            var selectedItem = grid.SelectedItem;
+            if(selectedItem is not TeacherAndLesson teacherAndLesson) return;
+            TeachersAndLessons.RemoveTeacher(teacherAndLesson);
+            TeachersAndLessons = new ObservableCollection<TeacherAndLesson>
+                (_tables.GetTableTeacherAndLessons());
+            OnPropertyChanged(nameof(TeachersAndLessons));
         }
         #endregion
 
@@ -263,16 +263,14 @@ namespace SchoolSchedule.ViewModels
         public ICommand AddNewClass { get; }
 
         private bool CanAddNewClassExecute(object parameter)
-            => _className.IsNullOrEmpty() ? false : true;
+            => !_className.IsNullOrEmpty();
 
         private void OnAddNewClassExecuted(object parameter)
         {
-            if (!_className.IsNullOrEmpty())
-            {
-                ClassExtension.Add(_className);
-                Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
-                OnPropertyChanged(nameof(Classes));
-            }
+            var newClass = new Class { ClassName = _className };
+            Classes.Create(newClass);
+            Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
+            OnPropertyChanged(nameof(Classes));
         }
         #endregion
 
@@ -282,7 +280,13 @@ namespace SchoolSchedule.ViewModels
 
         private void OnRemoveClassExecuted(object parameter)
         {
-            ClassExtension.Remove(_classId);
+            var selectedClass = _tables.GetTableClasses()
+                .FirstOrDefault(x => x.ClassId == _classId);
+            if (selectedClass != null)
+            {
+                Classes.RemoveSelectedClass(selectedClass);
+            }
+
             Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
             OnPropertyChanged(nameof(Classes));
         }

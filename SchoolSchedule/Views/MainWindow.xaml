@@ -79,7 +79,7 @@
                                 HorizontalAlignment="Right">
                         <Button Content="Сохранить" Command="{Binding SaveSchedule}" />
                         <Button Content="Удалить" Command="{Binding DeleteSchedule}"
-                                CommandParameter="{Binding ElementName=MyData}"
+                                CommandParameter="{Binding ElementName=Schedule}"
                                 Margin="20,0,6,0"/>
                     </StackPanel>
                     <GroupBox Header="Класы" Grid.Column="0" Grid.Row="1">
@@ -90,7 +90,7 @@
                     </GroupBox>
                     <DockPanel Grid.Column="1" Grid.Row="1">
                         <GroupBox Header="Расписание" DockPanel.Dock="Top">
-                            <DataGrid x:Name="MyData" ItemsSource="{Binding SelectedClassSchedule}"
+                            <DataGrid x:Name="Schedule" ItemsSource="{Binding SelectedClassSchedule}"
                                       AlternatingRowBackground="LightGray"
                                       GridLinesVisibility="Vertical" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
@@ -161,22 +161,31 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Преподаватель и предмет">
-                        <DataGrid ItemsSource="{Binding TeachersAndLessons}"
-                                  Grid.Column="0" IsReadOnly="True"
-                                  AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding TeacherId}"/>
-                                <DataGridTextColumn Header="Предмет" Binding="{Binding LessonName}"/>
-                                <DataGridTextColumn Header="ФИО преподавателя" Binding="{Binding Teacher.FullName}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </GroupBox>
+                    <DockPanel>
+                        <StackPanel>
+                            <GroupBox Header="Преподаватель и предмет">
+                                <DataGrid x:Name="TeacherAndLesson" 
+                                          ItemsSource="{Binding TeachersAndLessons, UpdateSourceTrigger=PropertyChanged}"
+                                          IsReadOnly="True"
+                                          AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="ID" Binding="{Binding TeacherId}"/>
+                                        <DataGridTextColumn Header="Предмет" Binding="{Binding LessonName}"/>
+                                        <DataGridTextColumn Header="ФИО преподавателя" Binding="{Binding Teacher.FullName}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </GroupBox>
+                            <Button Content="Удалить" Height="20" 
+                                    VerticalAlignment="Top" Margin="10" 
+                                    Command="{Binding RemoveTeacherAndLessons}" 
+                                    CommandParameter="{Binding ElementName=TeacherAndLesson}"></Button>
+                        </StackPanel>
+                    </DockPanel>
                     <DockPanel Grid.Column="1" Margin="5">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="190"/>
-                                <RowDefinition Height="150"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0">
                                 <Label Content="ФИО преподавателя"/>
@@ -189,15 +198,6 @@
                             <Button Content="Добавить" Height="30" 
                                     VerticalAlignment="Bottom" Margin="10" Grid.Row="0" 
                                     Command="{Binding AddNewTeacherAndLessons}"></Button>
-                            <StackPanel Grid.Row="1">
-                                <Label Content="ID преподавателя"/>
-                                <TextBox Text="{Binding TeacherId,UpdateSourceTrigger=PropertyChanged}"/>
-                                <Label Content="Название предмета" />
-                                <TextBox Text="{Binding LessonName,UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                            <Button Content="Удалить" Height="30" 
-                                    VerticalAlignment="Bottom" Margin="10" Grid.Row="1"
-                                    Command="{Binding RemoveTeacherAndLessons}"></Button>
                         </Grid>
                     </DockPanel>
                 </Grid>
