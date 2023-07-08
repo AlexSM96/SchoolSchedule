@@ -6,7 +6,7 @@ namespace SchoolSchedule.Model
 {
     internal static class ScheduleExtension
     {
-        private static SchoolScheduleContext _context = _context = new SchoolScheduleContext();
+        private static readonly SchoolScheduleContext _context = new();
        
         public static void AddSchedule(this List<Schedule> schedules, Schedule schedule)
         {

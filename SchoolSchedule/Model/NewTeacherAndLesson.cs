@@ -1,14 +1,18 @@
 ﻿using SchoolSchedule.DB.Database.Context;
 using SchoolSchedule.DB.Database.Entities;
+using SchoolSchedule.DB.Interfaces;
+using SchoolSchedule.DB.Repositories.Base;
 
 namespace SchoolSchedule.Model
 {
     internal static class NewTeacherAndLesson
     {
         private static SchoolScheduleContext _context;
+        private static IBaseRepository<TeacherAndLesson> _teacherAndLessonRepository;
         static NewTeacherAndLesson()
         {
             _context = new SchoolScheduleContext();
+            _teacherAndLessonRepository = new BaseRepository<TeacherAndLesson>(_context);
         }
 
         public static void  Add

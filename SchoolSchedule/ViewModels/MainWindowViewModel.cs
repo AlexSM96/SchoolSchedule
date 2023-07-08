@@ -16,7 +16,7 @@ namespace SchoolSchedule.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private Table _tables;
+        private readonly Table _tables;
 
         public ObservableCollection<Class> Classes { get; set; }
 
@@ -179,6 +179,7 @@ namespace SchoolSchedule.ViewModels
             RequestA = new ObservableCollection<RequestA>(GetDataA());
             RequestC = new ObservableCollection<RequestC>(GetDataC());
             Schedules = new List<Schedule>(_tables.GetTableSchedule());
+
         }
 
         private IEnumerable<RequestA> GetDataA()
@@ -213,9 +214,10 @@ namespace SchoolSchedule.ViewModels
                     Class = x.Key,
                     LessonCount = x.Select(x => x.LessonName).Count(),
                     UniqTeachersCount = x.Select(x => x.TeacherId)
-                    .Distinct()
-                    .Count()
+                        .Distinct()
+                        .Count()
                 });
+
             return request;
         }
 
@@ -238,7 +240,7 @@ namespace SchoolSchedule.ViewModels
         public ICommand RemoveTeacherAndLessons { get; }
 
         private bool CanRemoveTeacherAndLessonsExecute(object parameter)
-            => _teacherId <= 0 && _lessonName == string.Empty ? false : true;
+            => _teacherId > 0 || _lessonName != string.Empty;
 
         private void OnRemoveTeacherAndLessonsExecuted(object parameter)
         {
@@ -267,7 +269,7 @@ namespace SchoolSchedule.ViewModels
         {
             if (!_className.IsNullOrEmpty())
             {
-                NewClass.Add(_className);
+                ClassExtension.Add(_className);
                 Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
                 OnPropertyChanged(nameof(Classes));
             }
@@ -276,11 +278,11 @@ namespace SchoolSchedule.ViewModels
 
         #region RemoveClassCommand
         public ICommand RemoveClass { get; }
-        private bool CanRemoveClassExecute(object parameter) => _classId <= 0 ? false : true;
+        private bool CanRemoveClassExecute(object parameter) => _classId > 0;
 
         private void OnRemoveClassExecuted(object parameter)
         {
-            NewClass.Remove(_classId);
+            ClassExtension.Remove(_classId);
             Classes = new ObservableCollection<Class>(_tables.GetTableClasses());
             OnPropertyChanged(nameof(Classes));
         }
@@ -292,7 +294,7 @@ namespace SchoolSchedule.ViewModels
 
         private void OnFindClassRoomExecuted(object parameter)
         {
-            if (WeekDays.Count() == 0) return;
+            if (!WeekDays.Any()) return;
             RequestB = new ObservableCollection<RequestB>(GetDataB());
             OnPropertyChanged(nameof(RequestB));
             WeekDays.Clear();
