@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSchedule", "SchoolSchedule\SchoolSchedule.csproj", "{F705016C-FAF1-44F4-8345-FA351AFE4D0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSchedule.DB", "..\SchoolSchedule.DB\SchoolSchedule.DB\SchoolSchedule.DB.csproj", "{296402E5-DB40-4CE4-A85D-AB8DA932B497}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSchedule.DB", "..\SchoolSchedule.DB\SchoolSchedule.DB\SchoolSchedule.DB.csproj", "{9EB824CF-E39D-4C04-82DC-3518C158D2B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F705016C-FAF1-44F4-8345-FA351AFE4D0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{296402E5-DB40-4CE4-A85D-AB8DA932B497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EB824CF-E39D-4C04-82DC-3518C158D2B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EB824CF-E39D-4C04-82DC-3518C158D2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EB824CF-E39D-4C04-82DC-3518C158D2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EB824CF-E39D-4C04-82DC-3518C158D2B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
